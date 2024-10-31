@@ -201,25 +201,26 @@ class RenderContextGLImpl::PLSImplWebGL
         auto renderTarget = static_cast<RenderTargetGL*>(desc.renderTarget);
         renderTarget->allocateInternalPLSTextures(desc.interlockMode);
 
-        auto framebufferRenderTarget =
-            lite_rtti_cast<FramebufferRenderTargetGL*>(renderTarget);
-        if (framebufferRenderTarget != nullptr)
-        {
-            // We're targeting an external FBO directly. Make sure to allocate
-            // and attach an offscreen target texture.
-            framebufferRenderTarget->allocateOffscreenTargetTexture();
-            if (desc.colorLoadAction == LoadAction::preserveRenderTarget)
-            {
-                // Copy the framebuffer's contents to our offscreen texture.
-                framebufferRenderTarget->bindDestinationFramebuffer(
-                    GL_READ_FRAMEBUFFER);
-                framebufferRenderTarget->bindInternalFramebuffer(
-                    GL_DRAW_FRAMEBUFFER,
-                    DrawBufferMask::color);
-                glutils::BlitFramebuffer(desc.renderTargetUpdateBounds,
-                                         renderTarget->height());
-            }
-        }
+        // TODO DOPPLE make this an option
+        // auto framebufferRenderTarget =
+        //     lite_rtti_cast<FramebufferRenderTargetGL*>(renderTarget);
+        // if (framebufferRenderTarget != nullptr)
+        // {
+        //     // We're targeting an external FBO directly. Make sure to allocate
+        //     // and attach an offscreen target texture.
+        //     framebufferRenderTarget->allocateOffscreenTargetTexture();
+        //     if (desc.colorLoadAction == LoadAction::preserveRenderTarget)
+        //     {
+        //         // Copy the framebuffer's contents to our offscreen texture.
+        //         framebufferRenderTarget->bindDestinationFramebuffer(
+        //             GL_READ_FRAMEBUFFER);
+        //         framebufferRenderTarget->bindInternalFramebuffer(
+        //             GL_DRAW_FRAMEBUFFER,
+        //             DrawBufferMask::color);
+        //         glutils::BlitFramebuffer(desc.renderTargetUpdateBounds,
+        //                                  renderTarget->height());
+        //     }
+        // }
 
         // Begin pixel local storage.
         renderTarget->bindHeadlessFramebuffer(
@@ -259,20 +260,21 @@ class RenderContextGLImpl::PLSImplWebGL
         static_assert(COVERAGE_PLANE_IDX == 3);
         glEndPixelLocalStorageANGLE(4, kStoreOps);
 
-        if (auto framebufferRenderTarget =
-                lite_rtti_cast<FramebufferRenderTargetGL*>(
-                    static_cast<RenderTargetGL*>(desc.renderTarget)))
-        {
-            // We rendered to an offscreen texture. Copy back to the external
-            // target FBO.
-            framebufferRenderTarget->bindInternalFramebuffer(
-                GL_READ_FRAMEBUFFER,
-                DrawBufferMask::color);
-            framebufferRenderTarget->bindDestinationFramebuffer(
-                GL_DRAW_FRAMEBUFFER);
-            glutils::BlitFramebuffer(desc.renderTargetUpdateBounds,
-                                     framebufferRenderTarget->height());
-        }
+        // TODO DOPPLE make this an option
+        // if (auto framebufferRenderTarget =
+        //         lite_rtti_cast<FramebufferRenderTargetGL*>(
+        //             static_cast<RenderTargetGL*>(desc.renderTarget)))
+        // {
+        //     // We rendered to an offscreen texture. Copy back to the external
+        //     // target FBO.
+        //     framebufferRenderTarget->bindInternalFramebuffer(
+        //         GL_READ_FRAMEBUFFER,
+        //         DrawBufferMask::color);
+        //     framebufferRenderTarget->bindDestinationFramebuffer(
+        //         GL_DRAW_FRAMEBUFFER);
+        //     glutils::BlitFramebuffer(desc.renderTargetUpdateBounds,
+        //                              framebufferRenderTarget->height());
+        // }
     }
 
     void pushShaderDefines(gpu::InterlockMode,
