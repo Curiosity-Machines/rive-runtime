@@ -197,6 +197,8 @@ public:
                                           bool* isFBO0) final;
     void bindInternalDstTexture(GLenum activeTexture) final;
 
+    GLuint externalTextureID() const { return m_offscreenTargetTexture; }
+
 private:
     // Ownership of this object is not assumed; the client must delete it when
     // done.
