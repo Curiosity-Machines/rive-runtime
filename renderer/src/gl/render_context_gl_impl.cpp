@@ -2040,12 +2040,13 @@ std::unique_ptr<RenderContext> RenderContextGLImpl::MakeContext(
         {
             // EXT_shader_framebuffer_fetch is costly on Qualcomm, with or
             // without the "noncoherent" extension. Use MSAA on Adreno.
-            if (strstr(rendererString, "Adreno") == nullptr)
-            {
+            // DOPPLE We need to use PLS for rendering to work correctly
+            // if (strstr(rendererString, "Adreno") == nullptr)
+            // {
                 return MakeContext(rendererString,
                                    capabilities,
                                    MakePLSImplWebGL());
-            }
+            // }
         }
 #endif
 
